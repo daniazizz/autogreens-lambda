@@ -348,8 +348,8 @@ def run_mc(username, password, sheet, shop_id):
         # try or skip
         try:
          
-         # vp_data_element = driver.find_element(By.XPATH, "/html/body/ui-view/app/div/order/div/div[2]/div[2]/div[3]/div[2]/table/tbody/tr[1]/td[3]/span")
-         vp_data_element = driver.find_element(By.XPATH, "/html/body/ui-view/app/div/order/div/div[2]/div[2]/div[3]/div[2]/table/tbody/tr[1]/td[4]/span")
+         vp_data_element = driver.find_element(By.XPATH, "/html/body/ui-view/app/div/order/div/div[2]/div[2]/div[3]/div[2]/table/tbody/tr[1]/td[3]/span")
+        #  vp_data_element = driver.find_element(By.XPATH, "/html/body/ui-view/app/div/order/div/div[2]/div[2]/div[3]/div[2]/table/tbody/tr[1]/td[4]/span")
          vp_scraped_data = vp_data_element.text
          update_cell(sheet, i, VP_COL, format_euro(vp_scraped_data))
          
