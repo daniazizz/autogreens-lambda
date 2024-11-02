@@ -233,8 +233,8 @@ def run_eos(username, password, sheet):
          scraped_data = data_element.text
          print(scraped_data)
          update_cell(sheet, i, GREENYARD_PRICE_COL, scraped_data)
-         ct = datetime.datetime.now()
-         update_cell(sheet, i, LAST_UPDATE_COL, str(ct))
+        #  ct = datetime.datetime.now()
+        #  update_cell(sheet, i, LAST_UPDATE_COL, str(ct))
         except:
          print("Error")
          update_cell(sheet, i, GREENYARD_PRICE_COL, "Error")
@@ -255,6 +255,12 @@ def init_mc(username, password, shop_id):
    # Step 1: Log in to the website
    driver.get("https://mycadencier.carrefour.eu/client/#!/login")
    human_sleep(2, 4)
+   # Add screenshots to the S3 bucket
+   capture_screenshot_and_upload(
+        driver, "mc-login-page.png"
+    )
+    
+   
 
 
    # Enter username
@@ -278,17 +284,32 @@ def init_mc(username, password, shop_id):
    human_sleep(1, 2)
    password_input.send_keys(password)  # Replace with your password
    human_sleep(1, 3)
+   
+   # Add screenshots to the S3 bucket
+   capture_screenshot_and_upload(
+        driver, "mc-login-page-filled.png"
+    )
 
 
    # Submit the form
    login_button = driver.find_element(By.XPATH, "/html/body/ui-view/login/div/div/div/form/div/button")
    ActionChains(driver).move_to_element(login_button).click().perform()
    human_sleep(3, 5)
+   
+    # Add screenshots to the S3 bucket
+   capture_screenshot_and_upload(
+        driver, "mc-dashboard.png"
+    )
   
    # click category
    login_button = driver.find_element(By.XPATH, "/html/body/ui-view/app/div/home/div/div[1]/div/div[2]/div/i")
    ActionChains(driver).move_to_element(login_button).click().perform()
    human_sleep(3, 5)
+   
+   # Add screenshots to the S3 bucket
+   capture_screenshot_and_upload(
+          driver, "mc-category-page.png")
+    
   
    return driver
 
@@ -318,6 +339,10 @@ def run_mc(username, password, sheet, shop_id):
         human_sleep(1, 2)
         search_input.send_keys(e.get('MC-REF'))
         human_sleep(1, 3)
+        # Add screenshots to the S3 bucket
+        capture_screenshot_and_upload(
+            driver, f"mc-search-{e.get('MC-REF')}.png"
+        )
         
         # try or skip
         try:
@@ -335,6 +360,10 @@ def run_mc(username, password, sheet, shop_id):
          
          
          human_sleep(2, 4)
+         
+            # Add screenshots to the S3 bucket
+         capture_screenshot_and_upload(
+                driver, f"mc-product-{e.get('MC-REF')}.png")
 
 
          # Step 3: Scrape the required information
@@ -369,7 +398,7 @@ def handler(event, context):
     # SHEET WITH NAME "MARKET" AND "EXPRESS"
     sheet_market = client.open('AUTOGREENS').get_worksheet(0)
     sheet_express = client.open('AUTOGREENS').get_worksheet(1)
-    run_eos(GY_USERNAME_MARKET, GY_PASSWORD_MARKET, sheet_market)
+    # run_eos(GY_USERNAME_MARKET, GY_PASSWORD_MARKET, sheet_market)
     run_mc(MC_USERNAME_MARKET, MC_PASSWORD_MARKET, sheet_market, MC_SHOP_ID_MARKET)
     # sheet_market.sort((PRIJS_VERSHIL_COL, 'des'))
     # run_eos(GY_USERNAME_EXPRESS, GY_PASSWORD_EXPRESS, sheet_express)
