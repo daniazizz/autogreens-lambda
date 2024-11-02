@@ -31,4 +31,4 @@ jobs:
 
       - name: Update Lambda function with new image
         run: |
-          aws lambda update-function-code --function-name docker-lambda-function --image-uri ${{ secrets.ECR_REPOSITORY }}:latest
+          aws lambda update-function-code --function-name autogreensLambda --image-uri ${{ secrets.ECR_REPOSITORY }}:latest
