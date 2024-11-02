@@ -152,23 +152,23 @@ def init_eos(username, password):
 
    # Step 1: Log in to the website
    driver.get("https://eos.firstinfresh.be/login")
-   human_sleep(4, 6)
+   human_sleep(2, 4)
    print(username, password)
 
    # Enter username
    username_input = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/form/div[1]/div[1]/input")
    ActionChains(driver).move_to_element(username_input).click().perform()
-   human_sleep(2, 3)
+   human_sleep(1, 3)
    username_input.send_keys(username)  # Replace with your username
-   human_sleep(2, 3)
+   human_sleep(1, 3)
    print("Username entered")
 
    # Enter password
    password_input = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/form/div[1]/div[2]/input")
    ActionChains(driver).move_to_element(password_input).click().perform()
-   human_sleep(2, 3)
+   human_sleep(1, 3)
    password_input.send_keys(password)  # Replace with your password
-   human_sleep(2, 3)
+   human_sleep(1, 3)
    print("Password entered")
 
    print(driver.page_source)  # This will print the full HTML of the current page
@@ -183,7 +183,7 @@ def init_eos(username, password):
    # Submit the form
    login_button = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/form/div[2]/input")
    ActionChains(driver).move_to_element(login_button).click().perform()
-   human_sleep(3, 5)
+   human_sleep(2, 4)
    print("Logged in successfully")
   
    return driver
@@ -213,7 +213,7 @@ def run_eos(username, password, sheet):
         print(e)
         # Step 2: Navigate to the desired page
         driver.get(f"https://eos.firstinfresh.be/shop/item/{e.get('GY-REF')}")
-        human_sleep(2, 4)
+        human_sleep(1, 3)
         print(driver.page_source)  # This will print the full HTML of the current page
         capture_screenshot_and_upload(
             driver, f"item-{e.get('GY-REF')}.png"
@@ -254,7 +254,7 @@ def init_mc(username, password, shop_id):
 
    # Step 1: Log in to the website
    driver.get("https://mycadencier.carrefour.eu/client/#!/login")
-   human_sleep(2, 4)
+   human_sleep(1, 3)
    # Add screenshots to the S3 bucket
    capture_screenshot_and_upload(
         driver, "mc-login-page.png"
@@ -399,11 +399,11 @@ def handler(event, context):
     # SHEET WITH NAME "MARKET" AND "EXPRESS"
     sheet_market = client.open('AUTOGREENS').get_worksheet(0)
     sheet_express = client.open('AUTOGREENS').get_worksheet(1)
-    # run_eos(GY_USERNAME_MARKET, GY_PASSWORD_MARKET, sheet_market)
+    run_eos(GY_USERNAME_MARKET, GY_PASSWORD_MARKET, sheet_market)
     run_mc(MC_USERNAME_MARKET, MC_PASSWORD_MARKET, sheet_market, MC_SHOP_ID_MARKET)
-    # sheet_market.sort((PRIJS_VERSHIL_COL, 'des'))
-    # run_eos(GY_USERNAME_EXPRESS, GY_PASSWORD_EXPRESS, sheet_express)
-    # run_mc(MC_USERNAME_EXPRESS, MC_PASSWORD_EXPRESS, sheet_express, MC_SHOP_ID_EXPRESS)
+    sheet_market.sort((PRIJS_VERSHIL_COL, 'des'))
+    run_eos(GY_USERNAME_EXPRESS, GY_PASSWORD_EXPRESS, sheet_express)
+    run_mc(MC_USERNAME_EXPRESS, MC_PASSWORD_EXPRESS, sheet_express, MC_SHOP_ID_EXPRESS)
     sheet_express.sort((PRIJS_VERSHIL_COL, 'des'))
 
     return {
