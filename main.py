@@ -328,6 +328,7 @@ def format_euro(number):
 def run_mc(username, password, sheet, shop_id):
     driver = init_mc(username, password, shop_id)
     data = read_data(sheet)
+    driver.execute_script("document.body.style.zoom='0.5'")
     i = 2
     for e in data:
         print(e)
